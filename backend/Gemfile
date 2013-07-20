@@ -39,3 +39,4 @@ gem 'jquery-rails'
 
 gem 'delayed_job_active_record'
 gem 'git'
+gem 'railroady'

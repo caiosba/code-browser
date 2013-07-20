@@ -1,4 +1,5 @@
 #!/bin/bash
+# See also http://codeimpossible.com/2011/12/16/Stupid-Git-Trick-getting-contributor-stats/
 url=$1
 dir=$(mktemp -d)
 git clone $url $dir 2>/dev/null >/dev/null
