@@ -1,0 +1,6 @@
+#!/bin/bash
+url=$1
+dir=$(mktemp -d)
+git clone $url $dir 2>/dev/null >/dev/null
+cd $dir
+git shortlog -s -n | sed 's/^\s\+\([0-9]\+\)\s\+\(.\+\)/"\2":\1/g' | tr "\\n" "," | sed 's/,$/}/g' | sed 's/^/{/g'
