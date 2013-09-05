@@ -6,7 +6,7 @@ class Repository < ActiveRecord::Base
     github: /^(https?:\/\/github\.com\/[^\/]+\/[^\/]+)/
   }
 
-  # TODO: Add more tools here, like Analyzo
+  # TODO: Add more tools here, like Analizo
   # (name / path to executable that receives a URL and returns data)
   TOOLS = {
     gitshortlog: File.join(Rails.root, 'tools', 'gitshortlog')
