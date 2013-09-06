@@ -3,6 +3,7 @@ var bgPage = chrome.extension.getBackgroundPage();
 var codeBrowserGenerator = {
   
   requestData: function() {
+    var that = this;
     document.getElementById('url').innerHTML = localStorage.codeBrowserURL;
     document.getElementById('status').innerHTML = 'Waiting for data...';
     var req = new XMLHttpRequest();
@@ -15,7 +16,9 @@ var codeBrowserGenerator = {
           codeBrowserGenerator.changeIcon('yellow');
           var json = JSON.parse(req.responseText);
           if (json.id) {
-            bgPage.setJobID(json.id);
+            bgPage.setJobID(json.id, function(tool, data) {
+              that.renderChart[tool](data);
+            });
           }
         } else {
           document.getElementById('status').innerHTML = 'Error: ' + req.statusText;
@@ -24,7 +27,7 @@ var codeBrowserGenerator = {
       }
       delete localStorage.codeBrowserURL;
     };
-    req.send('url=' + encodeURIComponent(localStorage.codeBrowserURL));
+    req.send('url=' + encodeURIComponent(localStorage.codeBrowserURL) + '&tool=' + document.getElementById('viz').value);
   },
 
   changeIcon: function(color) {
@@ -36,6 +39,26 @@ var codeBrowserGenerator = {
 
   valid: function(url) {
     return /^https?:\/\/github\.com\/.*$/.test(url);
+  },
+
+  // Render a chart for each tool
+  renderChart: {
+
+    'gitshortlog' : function(data) {
+      var labels = {};
+      var values = [];
+      document.getElementById('chart').innerHTML = '<ul>';
+      for (var name in data) {
+        document.getElementById('chart').innerHTML += '<li>' + name + ': ' + data[name] + '</li>';
+        labels[data[name]] = name;
+        values.push(parseInt(data[name], 10));
+      }
+      document.getElementById('chart').innerHTML += '</ul>';
+      var chart = d3.select("body").append("div").attr("class", "chart");
+      var x = d3.scale.linear().domain([0, d3.max(values)]).range(["0px", "350px"]); 
+      chart.selectAll("div").data(values).enter().append("div").style("width", x).text(function(d) { return labels[d] + ' ('+ d + ')'; });
+    }
+
   }
 
 };
@@ -45,9 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
   chrome.tabs.query({ 'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT }, function(tabs) {
     if (!localStorage.codeBrowserURL) {
       if (codeBrowserGenerator.valid(tabs[0].url)) {
-        localStorage.codeBrowserURL = tabs[0].url;
         codeBrowserGenerator.changeIcon('blue');
-        codeBrowserGenerator.requestData();
+        document.getElementById('url').innerHTML = tabs[0].url;
+        document.getElementById('submit').onclick = function() {
+          localStorage.codeBrowserURL = tabs[0].url;
+          codeBrowserGenerator.requestData();
+        }
       }
       else {
         codeBrowserGenerator.changeIcon('gray');

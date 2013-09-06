@@ -9,10 +9,10 @@ class Repository < ActiveRecord::Base
   # TODO: Add more tools here, like Analizo
   # (name / path to executable that receives a URL and returns data)
   TOOLS = {
-    gitshortlog: File.join(Rails.root, 'tools', 'gitshortlog')
+    'gitshortlog' => File.join(Rails.root, 'tools', 'gitshortlog')
   }
 
-  attr_accessible :url, :data, :repo_url, :provider
+  attr_accessible :url, :data, :repo_url, :provider, :tool
 
   validate :url_is_supported
   validates_presence_of :url
@@ -20,11 +20,8 @@ class Repository < ActiveRecord::Base
   before_create :get_repository
   after_create :queue_fetch_data
 
-  # TODO: Add option to choose tool
   def fetch_data
-    f = File.open('/tmp/bli', 'w+'); f.puts('Test'); f.close
-    tool = :gitshortlog
-    self.data = %x['#{Repository::TOOLS[tool]}' #{self.repo_url}]
+    self.data = %x['#{Repository::TOOLS[self.tool]}' #{self.repo_url}]
     self.status = 'done'
     self.save!
   end

@@ -1,15 +1,16 @@
 var pollInterval = 10000;
 var jobID;
 var timer;
+var callback;
 
-function setJobID(id) {
+function setJobID(id, func) {
   jobID = id;
+  callback = func;
   startRequest();
 }
 
 function checkStatus() {
   if (jobID) {
-    var fgPage = chrome.extension.getViews({ type : 'popup' })[0];
     var req = new XMLHttpRequest();
     req.open("GET", 'http://localhost:3000/repositories/' + jobID + '.json', true);
     req.onreadystatechange = function(e) {
@@ -17,12 +18,16 @@ function checkStatus() {
         if (req.status === 200 || req.status === 201) {
           var json = JSON.parse(req.responseText);
           if (json.data) {
+            // alert('Ready!');
             chrome.browserAction.setIcon({ 'path' : 'icon-green.png' });
-            clearTimeout(timer);
+            callback.apply(this, [json.tool, JSON.parse(json.data)]);
+            jobID = null;
+            window.clearTimeout(timer);
           }
         } else {
           chrome.browserAction.setIcon({ 'path' : 'icon-red.png' });
-          clearTimeout(timer);
+          jobID = null;
+          window.clearTimeout(timer);
         }
       }
     };
@@ -31,6 +36,8 @@ function checkStatus() {
 }
 
 function startRequest() {
-  checkStatus();
-  timer = window.setTimeout(startRequest, pollInterval);
+  if (jobID) {
+    checkStatus();
+    timer = window.setTimeout(startRequest, pollInterval);
+  }
 }

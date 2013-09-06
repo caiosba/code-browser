@@ -1,7 +1,12 @@
 #!/bin/bash
 # See also http://codeimpossible.com/2011/12/16/Stupid-Git-Trick-getting-contributor-stats/
 url=$1
-dir=$(mktemp -d)
-git clone $url $dir 2>/dev/null >/dev/null
-cd $dir
+md5=$(echo $url | openssl md5)
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ../repositories && pwd )"
+cd "$dir"
+if [ ! -d "$md5" ]
+then
+  git clone $url $md5 2>/dev/null >/dev/null
+fi
+cd $md5
 git shortlog -s -n | sed 's/^\s\+\([0-9]\+\)\s\+\(.\+\)/"\2":\1/g' | tr "\\n" "," | sed 's/,$/}/g' | sed 's/^/{/g'

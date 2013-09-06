@@ -16,6 +16,14 @@
         width: 75px;
         height: 75px;
       }
+      .chart div {
+        font: 10px sans-serif;
+        background-color: steelblue;
+        text-align: right;
+        padding: 3px;
+        margin: 1px;
+        color: white;
+      }
     </style>
 
     <!--
@@ -25,10 +33,19 @@
       - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
      -->
     <script src="popup.js"></script>
+    <script src="d3.js" charset="utf-8"></script>
   </head>
   <body>
     <h3>URL: <span id="url">Not supported</span></h3>
     <p id="status"></p>
+    <p>Choose your visualization:</p>
+    <select id="viz">
+      <option value="gitshortlog">Bar chart of contributors</option>
+      <option value="analizo">Analizo</option>
+    </select>
+    <button id="submit">Submit</button>
+    <div id="chart">
+    </div>
   </body>
 </html>
 

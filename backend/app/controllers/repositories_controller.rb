@@ -14,7 +14,7 @@ class RepositoriesController < ApplicationController
 
   # POST /repositories.json
   def create
-    @repository = Repository.new(:url => params[:url].to_s)
+    @repository = Repository.new(:url => params[:url].to_s, :tool => params[:tool])
 
     if @repository.save
       respond_with(@repository, status: :created, location: @repository)
