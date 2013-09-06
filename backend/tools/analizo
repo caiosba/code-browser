@@ -1,0 +1,19 @@
+#!/bin/bash
+url=$1
+md5=$(echo $url | openssl md5)
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ../repositories && pwd )"
+cd "$dir"
+if [ ! -d "$md5" ]
+then
+  git clone $url $md5 2>/dev/null >/dev/null
+fi
+cd "$md5"
+if [ ! -f metrics.yml ]
+then
+  analizo metrics . > metrics.yml
+fi
+if [ ! -f metrics.json ]
+then
+  ruby "$dir/../tools/yaml2json" metrics.yml > metrics.json
+fi
+cat metrics.json

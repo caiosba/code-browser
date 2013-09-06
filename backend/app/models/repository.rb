@@ -6,11 +6,12 @@ class Repository < ActiveRecord::Base
     github: /^(https?:\/\/github\.com\/[^\/]+\/[^\/]+)/
   }
 
-  # TODO: Add more tools here, like Analizo
+  # TODO: Add more tools here
   # (name / path to executable that receives a URL and returns data)
   TOOLS = {
     'gitshortlog' => File.join(Rails.root, 'tools', 'gitshortlog'),
-    'gitlineschanged' => File.join(Rails.root, 'tools', 'gitlineschanged')
+    'gitlineschanged' => File.join(Rails.root, 'tools', 'gitlineschanged'),
+    'analizo' => File.join(Rails.root, 'tools', 'analizo')
   }
 
   attr_accessible :url, :data, :repo_url, :provider, :tool

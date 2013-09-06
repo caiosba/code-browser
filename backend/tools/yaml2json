@@ -1,0 +1,15 @@
+# Convert YAML to JSON
+require 'yaml'
+require 'json'
+json = { "header" => [], "values" => {} }
+yaml = YAML.load_stream(File.read(ARGV.first))
+yaml.documents.each do |doc|
+  json["values"][doc["_filename"]] = {}
+  doc.each do |key, value|
+    if key != "_filename" and key != "_module"
+      json["values"][doc["_filename"]][key] = value
+      json["header"] << key unless json["header"].include?(key)
+    end
+  end
+end
+puts json.to_json

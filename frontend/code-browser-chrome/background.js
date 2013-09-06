@@ -1,4 +1,4 @@
-var pollInterval = 10000;
+var pollInterval = 3000;
 var jobID;
 var timer;
 var callback;

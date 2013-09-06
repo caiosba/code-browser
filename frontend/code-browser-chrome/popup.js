@@ -18,6 +18,7 @@ var codeBrowserGenerator = {
           if (json.id) {
             bgPage.setJobID(json.id, function(tool, data) {
               that.renderChart[tool](data);
+              document.getElementById('status').innerHTML = 'Chart rendered!';
             });
           }
         } else {
@@ -72,6 +73,22 @@ var codeBrowserGenerator = {
       var chart = d3.select("body").append("div").attr("class", "chart-lines");
       var x = d3.scale.linear().domain([0, d3.max(values)]).range(["0px", "350px"]); 
       chart.selectAll("div").data(values).enter().append("div").style("width", x).text(function(d) { return labels[d] + ' ('+ d + ')'; });
+    },
+
+    'analizo' : function(data) {
+ 	    new bubbleSVGChart({
+	      'container' : 'chart',
+	    	'size' : [300,200],
+	    	'position' : [40,20],
+	    	'strokeWidth' : 0,
+	    	'lang' : 'en',
+	    	'requestPath' : 'data',
+        'requestData' : data,
+		  	'useDefaultInterface' : true,
+		  	'defaultBubbleSize' : 20,
+		  	'initialState' : { 'x' : 'npm', 'y': 'loc', 'size' : 'noa', 'color' : '' },
+  	  	'background' : ['#b9a680','#f0e4ca']
+      });     
     }
 
   }
