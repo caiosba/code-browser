@@ -19,7 +19,7 @@ used to generate data.
 
 ### How to run the frontend
 
-(TODO)
+Install the Google Chrome extension that lives on `frontend` directory.
 
 ### Credits
 
