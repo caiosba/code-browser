@@ -1,5 +1,3 @@
-var bgPage = chrome.extension.getBackgroundPage();
-
 var codeBrowserGenerator = {
   
   requestData: function() {
@@ -16,7 +14,9 @@ var codeBrowserGenerator = {
           codeBrowserGenerator.changeIcon('yellow');
           var json = JSON.parse(req.responseText);
           if (json.id) {
+            var bgPage = chrome.extension.getBackgroundPage();
             bgPage.setJobID(json.id, function(tool, data) {
+              document.getElementById('chart').innerHTML = '';
               that.renderChart[tool](data);
               document.getElementById('status').innerHTML = 'Chart rendered!';
             });
