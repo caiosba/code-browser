@@ -8,7 +8,7 @@ class RepositoriesController < ApplicationController
     if @repository.nil?
       respond_with({}, status: :not_found)
     else
-      respond_with(@repository, status: @repository.status, location: @repository)
+      respond_with(@repository, status: 200, location: @repository)
     end
   end
 
