@@ -9,7 +9,8 @@ class Repository < ActiveRecord::Base
   # TODO: Add more tools here, like Analizo
   # (name / path to executable that receives a URL and returns data)
   TOOLS = {
-    'gitshortlog' => File.join(Rails.root, 'tools', 'gitshortlog')
+    'gitshortlog' => File.join(Rails.root, 'tools', 'gitshortlog'),
+    'gitlineschanged' => File.join(Rails.root, 'tools', 'gitlineschanged')
   }
 
   attr_accessible :url, :data, :repo_url, :provider, :tool

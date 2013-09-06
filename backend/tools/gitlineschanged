@@ -1,0 +1,15 @@
+#!/bin/bash
+url=$1
+md5=$(echo $url | openssl md5)
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ../repositories && pwd )"
+cd "$dir"
+if [ ! -d "$md5" ]
+then
+  git clone $url $md5 2>/dev/null >/dev/null
+fi
+cd "$md5"
+if [ ! -f metrics.txt ]
+then
+  git ls-files | while read i; do git blame $i | sed -e 's/^[^(]*(//' -e 's/^\([^[:digit:]]*\)[[:space:]]\+[[:digit:]].*/\1/'; done | sort | uniq -ic | sort -nr > metrics.txt
+fi
+cat metrics.txt | sed 's/^ *\([0-9]\+\) *\([^ ]\+\).*$/"\2":\1/g' | tr "\\n" "," | sed 's/^/{/g' | sed 's/,$/}/g'

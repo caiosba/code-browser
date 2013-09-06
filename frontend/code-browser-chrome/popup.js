@@ -54,7 +54,22 @@ var codeBrowserGenerator = {
         values.push(parseInt(data[name], 10));
       }
       document.getElementById('chart').innerHTML += '</ul>';
-      var chart = d3.select("body").append("div").attr("class", "chart");
+      var chart = d3.select("body").append("div").attr("class", "chart-commits");
+      var x = d3.scale.linear().domain([0, d3.max(values)]).range(["0px", "350px"]); 
+      chart.selectAll("div").data(values).enter().append("div").style("width", x).text(function(d) { return labels[d] + ' ('+ d + ')'; });
+    },
+
+    'gitlineschanged' : function(data) {
+      var labels = {};
+      var values = [];
+      document.getElementById('chart').innerHTML = '<ul>';
+      for (var name in data) {
+        document.getElementById('chart').innerHTML += '<li>' + name + ': ' + data[name] + '</li>';
+        labels[data[name]] = name;
+        values.push(parseInt(data[name], 10));
+      }
+      document.getElementById('chart').innerHTML += '</ul>';
+      var chart = d3.select("body").append("div").attr("class", "chart-lines");
       var x = d3.scale.linear().domain([0, d3.max(values)]).range(["0px", "350px"]); 
       chart.selectAll("div").data(values).enter().append("div").style("width", x).text(function(d) { return labels[d] + ' ('+ d + ')'; });
     }

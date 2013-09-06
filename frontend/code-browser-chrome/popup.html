@@ -8,15 +8,15 @@
         overflow-x: hidden;
         font: 12px sans-serif;
       }
-
-      img {
-        margin: 5px;
-        border: 2px solid black;
-        vertical-align: middle;
-        width: 75px;
-        height: 75px;
+      .chart-lines div {
+        font: 10px sans-serif;
+        background-color: #a00;
+        text-align: right;
+        padding: 3px;
+        margin: 1px;
+        color: white;
       }
-      .chart div {
+      .chart-commits div {
         font: 10px sans-serif;
         background-color: steelblue;
         text-align: right;
@@ -40,7 +40,8 @@
     <p id="status"></p>
     <p>Choose your visualization:</p>
     <select id="viz">
-      <option value="gitshortlog">Bar chart of contributors</option>
+      <option value="gitshortlog">Bar chart of contributors (commits)</option>
+      <option value="gitlineschanged">Bar chart of contributors (lines changed)</option>
       <option value="analizo">Analizo</option>
     </select>
     <button id="submit">Submit</button>
