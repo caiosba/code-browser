@@ -6,9 +6,9 @@ class RepositoriesController < ApplicationController
     @repository = Repository.find_by_id(params[:id])
 
     if @repository.nil?
-      format.json { render json: {}, status: :not_found }
+      respond_with({}, status: :not_found)
     else
-      format.json { render json: @repository, status: @repository.status, location: @repository }
+      respond_with(@repository, status: @repository.status, location: @repository)
     end
   end
 
@@ -17,9 +17,9 @@ class RepositoriesController < ApplicationController
     @repository = Repository.new(:url => params[:url].to_s)
 
     if @repository.save
-      format.json { render json: @repository, status: :created, location: @repository }
+      respond_with(@repository, status: :created, location: @repository)
     else
-      format.json { render json: @repository.errors, status: :unprocessable_entity }
+      respond_with(@repository.errors, status: :unprocessable_entity)
     end
   end
 

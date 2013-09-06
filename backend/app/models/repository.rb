@@ -52,8 +52,8 @@ class Repository < ActiveRecord::Base
   end
 
   def queue_fetch_data
-    require File.join(Rails.root, 'lib', 'delayed_clone')
-    Delayed::Job.enqueue DelayedClone.new(self.id)
+    require File.join(Rails.root, 'lib', 'repository_job')
+    Delayed::Job.enqueue RepositoryJob.new(self.id)
     self.status = 'queued'
     self.save!
   end
