@@ -7,7 +7,8 @@ and code. It aims to be a browser extension that sends information to a backend 
 which will generate statistics about the current site being visited. Current supported
 sites is Github, but it is very easy to extend by adding support to other sites.
 The visualizations use OpenedEyes and D3.js libraries. On the backend, Git itself and Analizo are
-used to generate data.
+used to generate data. It uses caching at all stages in order to improve performance.
+This work is not complete yet, but it works for academic purposes and as a proof-of-concept.
 
 ### How to run the backend
 
@@ -16,11 +17,15 @@ used to generate data.
 * Edit config/database.yml to configure you database
 * Run `rake db:migrate` to create the tables in the database
 * Start the server: `rails s`
-* Open http://localhost:3000 in your browser
+* Start the daemon of background jobs: `rake jobs:work`
 
 ### How to run the frontend
 
 Install the Google Chrome extension that lives on `frontend` directory.
+
+### Example
+
+Showing information about a repository, using Analizo to generate data and OpenedEyes for visualization: http://homes.dcc.ufba.br/~caiosba/mestrado/code-browser-1.png.
 
 ### Credits
 
